@@ -39,15 +39,7 @@ export default class UpdateKeyForm extends React.PureComponent<Props, State> {
     this.setState({ newKey });
   };
 
-  handleUpdate = () => {
-    return this.state.newKey !== undefined
-      ? this.props.onKeyChange(this.props.component.key, this.state.newKey)
-      : Promise.reject(undefined);
-  };
-
-  handleResetClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.currentTarget.blur();
+  handleResetClick = () => {
     this.setState({ newKey: undefined });
   };
 

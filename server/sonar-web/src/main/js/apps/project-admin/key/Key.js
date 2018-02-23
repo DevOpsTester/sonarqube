@@ -26,14 +26,13 @@ import UpdateForm from './UpdateForm';
 import BulkUpdate from './BulkUpdate';
 import FineGrainedUpdate from './FineGrainedUpdate';
 import { reloadUpdateKeyPage } from './utils';
-import { fetchProjectModules, changeKey } from '../store/actions';
+import { changeKey, fetchProjectModules } from '../store/actions';
 import { translate } from '../../../helpers/l10n';
 import {
   addGlobalErrorMessage,
-  closeAllGlobalMessages,
-  addGlobalSuccessMessage
+  addGlobalSuccessMessage,
+  closeAllGlobalMessages
 } from '../../../store/globalMessages/duck';
-import { parseError } from '../../../helpers/request';
 import RecentHistory from '../../../app/components/RecentHistory';
 import { getProjectAdminProjectModules } from '../../../store/rootReducer';
 
@@ -67,12 +66,13 @@ class Key extends React.PureComponent {
     });
   };
 
-  handleChangeTab(tab, e) {
-    e.preventDefault();
-    e.target.blur();
+  handleChangeTab = event => {
+    event.preventDefault();
+    event.currentTarget.blur();
+    const { tab } = event.currentTarget.dataset;
     this.setState({ tab });
     this.props.closeAllGlobalMessages();
-  }
+  };
 
   render() {
     const { component, modules } = this.props;
@@ -83,7 +83,7 @@ class Key extends React.PureComponent {
     const { tab } = this.state;
 
     return (
-      <div id="project-key" className="page page-limited">
+      <div className="page page-limited" id="project-key">
         <Helmet title={translate('update_key.page')} />
         <Header />
 
@@ -101,19 +101,21 @@ class Key extends React.PureComponent {
               <ul className="tabs">
                 <li>
                   <a
-                    id="update-key-tab-bulk"
                     className={tab === 'bulk' ? 'selected' : ''}
+                    data-tab="bulk"
                     href="#"
-                    onClick={this.handleChangeTab.bind(this, 'bulk')}>
+                    id="update-key-tab-bulk"
+                    onClick={this.handleChangeTab}>
                     {translate('update_key.bulk_update')}
                   </a>
                 </li>
                 <li>
                   <a
-                    id="update-key-tab-fine"
                     className={tab === 'fine' ? 'selected' : ''}
+                    data-tab="fine"
                     href="#"
-                    onClick={this.handleChangeTab.bind(this, 'fine')}>
+                    id="update-key-tab-fine"
+                    onClick={this.handleChangeTab}>
                     {translate('update_key.fine_grained_key_update')}
                   </a>
                 </li>
@@ -126,9 +128,9 @@ class Key extends React.PureComponent {
               <FineGrainedUpdate
                 component={component}
                 modules={modules}
+                onError={this.props.addGlobalErrorMessage}
                 onKeyChange={this.handleChangeKey}
                 onSuccess={this.props.closeAllGlobalMessages}
-                onError={this.props.addGlobalErrorMessage}
               />
             )}
           </div>

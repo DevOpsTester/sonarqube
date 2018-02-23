@@ -19,7 +19,7 @@
  */
 import * as React from 'react';
 import UpdateKeyConfirm from './UpdateKeyConfirm';
-import { SubmitButton, Button } from '../../../components/ui/buttons';
+import { Button, SubmitButton } from '../../../components/ui/buttons';
 import { translate } from '../../../helpers/l10n';
 
 interface Props {
@@ -34,19 +34,12 @@ interface State {
 export default class UpdateForm extends React.PureComponent<Props, State> {
   state: State = {};
 
-  handleUpdate = () => {
-    return this.state.newKey !== undefined
-      ? this.props.onKeyChange(this.props.component.key, this.state.newKey)
-      : Promise.reject(undefined);
-  };
-
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newKey = event.currentTarget.value;
     this.setState({ newKey });
   };
 
-  handleReset = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  handleReset = () => {
     this.setState({ newKey: undefined });
   };
 
